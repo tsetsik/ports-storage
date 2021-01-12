@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package storage;
+option go_package = ".;storage";
+
+message Message {
+    string body = 1;
+}
+
+service StorageService {
+    rpc UpsertPort(Message) returns (Message) {}
+}

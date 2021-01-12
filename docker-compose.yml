@@ -1,0 +1,7 @@
+version: "3.3"
+services:
+  web:
+    build: .
+    working_dir: /app
+    ports:
+      - "8085:8085"
