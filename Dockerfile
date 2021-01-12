@@ -15,6 +15,4 @@ RUN go mod download
 COPY . .
 RUN go build -o ./bin/ports-storage ./main.go
 
-FROM scratch
-WORKDIR /app
 CMD [ "/app/bin/ports-storage" ]

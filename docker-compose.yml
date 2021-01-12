@@ -3,5 +3,7 @@ services:
   web:
     build: .
     working_dir: /app
+    environment:
+      - PORT=9000
     ports:
-      - "8085:8085"
+      - "9000:9000"

@@ -3,10 +3,11 @@ syntax = "proto3";
 package storage;
 option go_package = ".;storage";
 
-message Message {
-    string body = 1;
+message Port {
+    int32 id = 2;
+    string data = 1;
 }
 
 service StorageService {
-    rpc UpsertPort(Message) returns (Message) {}
+    rpc UpsertPort(Port) returns (Port) {}
 }

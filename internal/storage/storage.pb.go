@@ -29,16 +29,17 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
-type Message struct {
+type Port struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Body string `protobuf:"bytes,1,opt,name=body,proto3" json:"body,omitempty"`
+	Id   int32  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Data string `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (x *Message) Reset() {
-	*x = Message{}
+func (x *Port) Reset() {
+	*x = Port{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_storage_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -46,13 +47,13 @@ func (x *Message) Reset() {
 	}
 }
 
-func (x *Message) String() string {
+func (x *Port) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Message) ProtoMessage() {}
+func (*Port) ProtoMessage() {}
 
-func (x *Message) ProtoReflect() protoreflect.Message {
+func (x *Port) ProtoReflect() protoreflect.Message {
 	mi := &file_storage_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -64,14 +65,21 @@ func (x *Message) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Message.ProtoReflect.Descriptor instead.
-func (*Message) Descriptor() ([]byte, []int) {
+// Deprecated: Use Port.ProtoReflect.Descriptor instead.
+func (*Port) Descriptor() ([]byte, []int) {
 	return file_storage_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Message) GetBody() string {
+func (x *Port) GetId() int32 {
 	if x != nil {
-		return x.Body
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Port) GetData() string {
+	if x != nil {
+		return x.Data
 	}
 	return ""
 }
@@ -80,15 +88,15 @@ var File_storage_proto protoreflect.FileDescriptor
 
 var file_storage_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x1d, 0x0a, 0x07, 0x4d, 0x65, 0x73, 0x73,
-	0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x62, 0x6f, 0x64, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x04, 0x62, 0x6f, 0x64, 0x79, 0x32, 0x44, 0x0a, 0x0e, 0x53, 0x74, 0x6f, 0x72, 0x61,
-	0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x32, 0x0a, 0x0a, 0x55, 0x70, 0x73,
-	0x65, 0x72, 0x74, 0x50, 0x6f, 0x72, 0x74, 0x12, 0x10, 0x2e, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67,
-	0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x10, 0x2e, 0x73, 0x74, 0x6f, 0x72,
-	0x61, 0x67, 0x65, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x00, 0x42, 0x0b, 0x5a,
-	0x09, 0x2e, 0x3b, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x07, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x22, 0x2a, 0x0a, 0x04, 0x50, 0x6f, 0x72, 0x74,
+	0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64,
+	0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x61, 0x32, 0x3e, 0x0a, 0x0e, 0x53, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2c, 0x0a, 0x0a, 0x55, 0x70, 0x73, 0x65, 0x72, 0x74,
+	0x50, 0x6f, 0x72, 0x74, 0x12, 0x0d, 0x2e, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x2e, 0x50,
+	0x6f, 0x72, 0x74, 0x1a, 0x0d, 0x2e, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67, 0x65, 0x2e, 0x50, 0x6f,
+	0x72, 0x74, 0x22, 0x00, 0x42, 0x0b, 0x5a, 0x09, 0x2e, 0x3b, 0x73, 0x74, 0x6f, 0x72, 0x61, 0x67,
+	0x65, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -105,11 +113,11 @@ func file_storage_proto_rawDescGZIP() []byte {
 
 var file_storage_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_storage_proto_goTypes = []interface{}{
-	(*Message)(nil), // 0: storage.Message
+	(*Port)(nil), // 0: storage.Port
 }
 var file_storage_proto_depIdxs = []int32{
-	0, // 0: storage.StorageService.UpsertPort:input_type -> storage.Message
-	0, // 1: storage.StorageService.UpsertPort:output_type -> storage.Message
+	0, // 0: storage.StorageService.UpsertPort:input_type -> storage.Port
+	0, // 1: storage.StorageService.UpsertPort:output_type -> storage.Port
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -124,7 +132,7 @@ func file_storage_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_storage_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Message); i {
+			switch v := v.(*Port); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -168,7 +176,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type StorageServiceClient interface {
-	UpsertPort(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error)
+	UpsertPort(ctx context.Context, in *Port, opts ...grpc.CallOption) (*Port, error)
 }
 
 type storageServiceClient struct {
@@ -179,8 +187,8 @@ func NewStorageServiceClient(cc grpc.ClientConnInterface) StorageServiceClient {
 	return &storageServiceClient{cc}
 }
 
-func (c *storageServiceClient) UpsertPort(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Message, error) {
-	out := new(Message)
+func (c *storageServiceClient) UpsertPort(ctx context.Context, in *Port, opts ...grpc.CallOption) (*Port, error) {
+	out := new(Port)
 	err := c.cc.Invoke(ctx, "/storage.StorageService/UpsertPort", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -190,14 +198,14 @@ func (c *storageServiceClient) UpsertPort(ctx context.Context, in *Message, opts
 
 // StorageServiceServer is the server API for StorageService service.
 type StorageServiceServer interface {
-	UpsertPort(context.Context, *Message) (*Message, error)
+	UpsertPort(context.Context, *Port) (*Port, error)
 }
 
 // UnimplementedStorageServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedStorageServiceServer struct {
 }
 
-func (*UnimplementedStorageServiceServer) UpsertPort(context.Context, *Message) (*Message, error) {
+func (*UnimplementedStorageServiceServer) UpsertPort(context.Context, *Port) (*Port, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpsertPort not implemented")
 }
 
@@ -206,7 +214,7 @@ func RegisterStorageServiceServer(s *grpc.Server, srv StorageServiceServer) {
 }
 
 func _StorageService_UpsertPort_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Message)
+	in := new(Port)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -218,7 +226,7 @@ func _StorageService_UpsertPort_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/storage.StorageService/UpsertPort",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StorageServiceServer).UpsertPort(ctx, req.(*Message))
+		return srv.(StorageServiceServer).UpsertPort(ctx, req.(*Port))
 	}
 	return interceptor(ctx, in, info, handler)
 }
