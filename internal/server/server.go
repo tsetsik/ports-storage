@@ -2,13 +2,15 @@ package server
 
 import (
 	"context"
-	"math/rand"
+	"log"
 
+	"github.com/tsetsik/ports-storage/internal/db"
 	"github.com/tsetsik/ports-storage/internal/storage"
 )
 
 type server struct {
 	data map[int32]string
+	db   db.DB
 }
 
 // Server interface definition
@@ -18,17 +20,38 @@ type Server interface {
 
 // NewServer initializing new server
 func NewServer() Server {
-	return &server{data: map[int32]string{}}
+	db, err := db.NewConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return &server{data: map[int32]string{}, db: db}
 }
 
 // UpsertPort function for processing port record
 func (s *server) UpsertPort(ctx context.Context, message *storage.Port) (*storage.Port, error) {
-	id := message.Id
-	if message.Id <= 0 {
-		id = rand.Int31()
+	err := s.db.Upsert(toPortDbModel(message))
+	if err != nil {
+		return nil, err
 	}
 
-	s.data[id] = message.Data
-
 	return message, nil
+}
+
+func toPortDbModel(sp *storage.Port) *db.Port {
+	model := &db.Port{
+		ID:          sp.Id,
+		Name:        sp.Name,
+		City:        sp.City,
+		Country:     sp.Country,
+		Alias:       sp.Alias,
+		Regions:     sp.Regions,
+		Coordinates: sp.Coordinates,
+		Province:    sp.Province,
+		Timezone:    sp.Timezone,
+		Unlocs:      sp.Unlocs,
+		Code:        sp.Code,
+	}
+
+	return model
 }

@@ -2,7 +2,6 @@ package v1
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 
 	"github.com/tsetsik/ports-storage/internal/storage"
@@ -11,13 +10,28 @@ import (
 
 // PortsStorageClient interface for defining properties
 type PortsStorageClient interface {
-	UpsertPort(id int32, data map[string]interface{}) (*storage.Port, error)
+	UpsertPort(p *Port) (*Port, error)
 }
 
 // PortsStorage struct
 type portsStorageClient struct {
 	client storage.StorageServiceClient
 	conn   *grpc.ClientConn
+}
+
+// Port struct for usage with this client
+type Port struct {
+	ID          int32
+	Name        string
+	City        string
+	Country     string
+	Alias       []string
+	Regions     []string
+	Coordinates []float32
+	Province    string
+	Timezone    string
+	Code        string
+	Unlocs      []string
 }
 
 // NewClient used for initializing new ports client
@@ -36,23 +50,46 @@ func NewClient(target string) (PortsStorageClient, error) {
 	return c, nil
 }
 
-func (sc *portsStorageClient) UpsertPort(id int32, data map[string]interface{}) (*storage.Port, error) {
-	json, err := json.Marshal(data)
-	if err != nil {
-		log.Fatalf("Error when marshaling data: %s", err)
-		return nil, err
-	}
+func (sc *portsStorageClient) UpsertPort(port *Port) (*Port, error) {
+	message := toStoragePort(port)
 
-	message := storage.Port{
-		Id:   id,
-		Data: string(json),
-	}
-
-	response, err := sc.client.UpsertPort(context.Background(), &message)
+	response, err := sc.client.UpsertPort(context.Background(), message)
 	if err != nil {
 		log.Fatalf("Error when calling UpsertPort: %s", err)
 		return nil, err
 	}
 
-	return response, nil
+	return toClientPort(response), nil
+}
+
+func toStoragePort(port *Port) *storage.Port {
+	return &storage.Port{
+		Id:          port.ID,
+		Name:        port.Name,
+		City:        port.City,
+		Country:     port.Country,
+		Alias:       port.Alias,
+		Regions:     port.Regions,
+		Coordinates: port.Coordinates,
+		Province:    port.Province,
+		Timezone:    port.Timezone,
+		Unlocs:      port.Unlocs,
+		Code:        port.Code,
+	}
+}
+
+func toClientPort(port *storage.Port) *Port {
+	return &Port{
+		ID:          port.Id,
+		Name:        port.Name,
+		City:        port.City,
+		Country:     port.Country,
+		Alias:       port.Alias,
+		Regions:     port.Regions,
+		Coordinates: port.Coordinates,
+		Province:    port.Province,
+		Timezone:    port.Timezone,
+		Unlocs:      port.Unlocs,
+		Code:        port.Code,
+	}
 }

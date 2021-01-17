@@ -19,9 +19,24 @@ func TestUpsertPort(t *testing.T) {
 	client, err := NewClient(target)
 	assert.Nil(t, err)
 
-	data := map[string]interface{}{"foo": "bar"}
-	response, err := client.UpsertPort(12, data)
+	clientPort := &Port{
+		ID:      123,
+		Name:    "Ajman",
+		City:    "Ajman",
+		Country: "United Arab Emirates",
+		Alias:   nil,
+		Regions: nil,
+		Coordinates: []float32{
+			float32(55.5136433),
+			float32(25.4052165),
+		},
+		Province: "Ajman",
+		Timezone: "Asia/Dubai",
+		Unlocs:   []string{"AEAJM"},
+		Code:     "52000",
+	}
+	response, err := client.UpsertPort(clientPort)
 
 	assert.Nil(t, err)
-	assert.Equal(t, int32(12), response.Id)
+	assert.Equal(t, clientPort, response)
 }
