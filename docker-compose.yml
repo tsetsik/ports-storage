@@ -14,6 +14,7 @@ services:
         - ./assets/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
   web:
     build: .
+    container_name: ports_storage
     working_dir: /app
     environment:
       - PORT=9000
