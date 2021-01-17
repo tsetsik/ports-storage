@@ -5,6 +5,8 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/joho/godotenv"
 	"github.com/tsetsik/ports-storage/internal/server"
@@ -33,4 +35,25 @@ func main() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)
 	}
+
+	var gracefulStop = make(chan os.Signal, 1)
+	signal.Notify(
+		gracefulStop,
+		syscall.SIGTERM,
+		syscall.SIGINT,
+		syscall.SIGKILL,
+	)
+
+	go func() {
+		sig := <-gracefulStop
+
+		// Graceful shutdown
+		server.Shutdown(sig)
+
+		// Shutdown grpc
+		grpcServer.Stop()
+
+		// handle it
+		os.Exit(0)
+	}()
 }

@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"log"
+	"os"
 
 	"github.com/tsetsik/ports-storage/internal/db"
 	"github.com/tsetsik/ports-storage/internal/storage"
@@ -16,6 +17,7 @@ type server struct {
 // Server interface definition
 type Server interface {
 	UpsertPort(ctx context.Context, message *storage.Port) (*storage.Port, error)
+	Shutdown(sig os.Signal)
 }
 
 // NewServer initializing new server
@@ -36,6 +38,10 @@ func (s *server) UpsertPort(ctx context.Context, message *storage.Port) (*storag
 	}
 
 	return message, nil
+}
+
+func (s *server) Shutdown(sig os.Signal) {
+	s.db.Shutdown()
 }
 
 func toPortDbModel(sp *storage.Port) *db.Port {
