@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,7 +14,7 @@ import (
 // DB interface
 type DB interface {
 	Upsert(m Model) error
-	Shutdown()
+	Disconnect()
 }
 
 type db struct {
@@ -23,9 +24,10 @@ type db struct {
 const databse = "ports"
 
 // NewConnection initiating new db connection
-func NewConnection() (DB, error) {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://test-user:test-password@localhost:27017/ports"))
+func NewConnection(uri string) (DB, error) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
 	if err != nil {
+		fmt.Println("\n\n The mongo err is: ", err)
 		return nil, err
 	}
 
@@ -52,6 +54,6 @@ func (db *db) Upsert(m Model) error {
 	return nil
 }
 
-func (db *db) Shutdown() {
+func (db *db) Disconnect() {
 	db.conn.Disconnect(context.Background())
 }

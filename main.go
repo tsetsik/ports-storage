@@ -20,13 +20,14 @@ func main() {
 	}
 
 	port := os.Getenv("PORT")
+	mongoURI := os.Getenv("MONGO_URI")
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	server := server.NewServer()
+	server := server.NewServer(mongoURI)
 
 	grpcServer := grpc.NewServer()
 
@@ -48,7 +49,7 @@ func main() {
 		sig := <-gracefulStop
 
 		// Graceful shutdown
-		server.Shutdown(sig)
+		server.Stop(sig)
 
 		// Shutdown grpc
 		grpcServer.Stop()

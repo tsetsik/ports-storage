@@ -17,12 +17,12 @@ type server struct {
 // Server interface definition
 type Server interface {
 	UpsertPort(ctx context.Context, message *storage.Port) (*storage.Port, error)
-	Shutdown(sig os.Signal)
+	Stop(sig os.Signal)
 }
 
 // NewServer initializing new server
-func NewServer() Server {
-	db, err := db.NewConnection()
+func NewServer(mongoURI string) Server {
+	db, err := db.NewConnection(mongoURI)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,8 +40,8 @@ func (s *server) UpsertPort(ctx context.Context, message *storage.Port) (*storag
 	return message, nil
 }
 
-func (s *server) Shutdown(sig os.Signal) {
-	s.db.Shutdown()
+func (s *server) Stop(sig os.Signal) {
+	s.db.Disconnect()
 }
 
 func toPortDbModel(sp *storage.Port) *db.Port {

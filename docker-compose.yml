@@ -17,6 +17,7 @@ services:
     working_dir: /app
     environment:
       - PORT=9000
+      - MONGO_URI=mongodb://test-user:test-password@mongodb:27017/ports
     depends_on:
       - "mongodb"
     ports:
