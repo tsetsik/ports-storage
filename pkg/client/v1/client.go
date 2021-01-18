@@ -21,17 +21,17 @@ type portsStorageClient struct {
 
 // Port struct for usage with this client
 type Port struct {
-	ID          int32
-	Name        string
-	City        string
-	Country     string
-	Alias       []string
-	Regions     []string
-	Coordinates []float32
-	Province    string
-	Timezone    string
-	Code        string
-	Unlocs      []string
+	ID          int32     `json:"id,omitempty"`
+	Name        string    `json:"name,omitempty"`
+	City        string    `json:"city,omitempty"`
+	Country     string    `json:"country,omitempty"`
+	Alias       []string  `json:"alias,omitempty"`
+	Regions     []string  `json:"regions,omitempty"`
+	Coordinates []float32 `json:"coordinates,omitempty"`
+	Province    string    `json:"province,omitempty"`
+	Timezone    string    `json:"timezone,omitempty"`
+	Code        string    `json:"code,omitempty"`
+	Unlocs      []string  `json:"unlocks,omitempty"`
 }
 
 // NewClient used for initializing new ports client
@@ -55,7 +55,7 @@ func (sc *portsStorageClient) UpsertPort(port *Port) (*Port, error) {
 
 	response, err := sc.client.UpsertPort(context.Background(), message)
 	if err != nil {
-		log.Fatalf("Error when calling UpsertPort: %s", err)
+		log.Printf("Error when calling UpsertPort: %s", err)
 		return nil, err
 	}
 
@@ -79,7 +79,7 @@ func toStoragePort(port *Port) *storage.Port {
 }
 
 func toClientPort(port *storage.Port) *Port {
-	return &Port{
+	p := &Port{
 		ID:          port.Id,
 		Name:        port.Name,
 		City:        port.City,
@@ -92,4 +92,6 @@ func toClientPort(port *storage.Port) *Port {
 		Unlocs:      port.Unlocs,
 		Code:        port.Code,
 	}
+
+	return p
 }
